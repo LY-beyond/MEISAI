@@ -87,9 +87,15 @@ def main():
     # 5. 可视化
     print("\n步骤5: 生成可视化结果...")
     
+    # 获取当前文件所在目录的绝对路径，确保路径正确
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    base_dir = os.path.dirname(os.path.dirname(current_dir))  # 到D:\MEISAI目录
+    
     # 确保输出目录存在
-    os.makedirs('../data/outputs', exist_ok=True)
-    os.makedirs('../visualizations', exist_ok=True)
+    outputs_dir = os.path.join(base_dir, 'data', 'outputs')
+    visualizations_dir = os.path.join(base_dir, 'visualizations')
+    os.makedirs(outputs_dir, exist_ok=True)
+    os.makedirs(visualizations_dir, exist_ok=True)
     
     # 特征重要性对比
     judge_top = judge_importance.head(10)
@@ -109,24 +115,30 @@ def main():
     ax.set_xlabel('特征')
     plt.xticks(rotation=45, ha='right')
     plt.tight_layout()
-    plt.savefig('../visualizations/feature_importance_comparison.png', dpi=300, bbox_inches='tight')
-    plt.show()
+    feature_importance_comparison_path = os.path.join(visualizations_dir, 'feature_importance_comparison.png')
+    plt.savefig(feature_importance_comparison_path, dpi=300, bbox_inches='tight')
+    print(f"已保存: {feature_importance_comparison_path}")
+    plt.close(fig)  # 关闭图形，避免内存泄漏
 
     # 绘制SHAP summary plots
+    judge_feature_importance_path = os.path.join(visualizations_dir, 'judge_feature_importance.png')
+    fan_feature_importance_path = os.path.join(visualizations_dir, 'fan_feature_importance.png')
     plot_summary_plot(judge_shap_values, feature_names, '评委得分模型特征重要性',
-                     '../visualizations/judge_feature_importance.png')
+                     judge_feature_importance_path)
     plot_summary_plot(fan_shap_values, feature_names, '粉丝投票模型特征重要性',
-                     '../visualizations/fan_feature_importance.png')
+                     fan_feature_importance_path)
 
     # 绘制关键特征依赖图
     key_features = ['celebrity_age_during_season', 'pro_experience']
     for feature in key_features:
         if feature in feature_names:
             idx = feature_names.index(feature)
+            judge_dependence_path = os.path.join(visualizations_dir, f'judge_{feature}_dependence.png')
+            fan_dependence_path = os.path.join(visualizations_dir, f'fan_{feature}_dependence.png')
             plot_shap_dependence(judge_shap_values, X, feature_names, idx,
-                                f'../visualizations/judge_{feature}_dependence.png')
+                                judge_dependence_path)
             plot_shap_dependence(fan_shap_values, X, feature_names, idx,
-                                f'../visualizations/fan_{feature}_dependence.png')
+                                fan_dependence_path)
 
     # 分析交互效应
     print("\n步骤6: 分析特征交互效应...")
@@ -139,10 +151,12 @@ def main():
     print(fan_interactions)
 
     # 绘制交互效应热力图
+    judge_interaction_heatmap_path = os.path.join(visualizations_dir, 'judge_interaction_heatmap.png')
+    fan_interaction_heatmap_path = os.path.join(visualizations_dir, 'fan_interaction_heatmap.png')
     plot_interaction_heatmap(judge_model, X, feature_names,
-                            '../visualizations/judge_interaction_heatmap.png')
+                            judge_interaction_heatmap_path)
     plot_interaction_heatmap(fan_model, X, feature_names,
-                            '../visualizations/fan_interaction_heatmap.png')
+                            fan_interaction_heatmap_path)
 
     # 查找争议案例
     print("\n步骤7: 查找争议案例...")
@@ -165,19 +179,31 @@ def main():
         print(f"- 专业经验: {data.iloc[idx]['pro_experience']}")
 
     # 保存分析结果到data/outputs目录
-    judge_importance.to_csv('../data/outputs/judge_feature_importance.csv', index=False)
-    fan_importance.to_csv('../data/outputs/fan_feature_importance.csv', index=False)
-    judge_interactions.to_csv('../data/outputs/judge_interactions.csv', index=False)
-    fan_interactions.to_csv('../data/outputs/fan_interactions.csv', index=False)
-    controversial_cases.to_csv('../data/outputs/controversial_cases.csv', index=False)
+    judge_importance_path = os.path.join(outputs_dir, 'judge_feature_importance.csv')
+    fan_importance_path = os.path.join(outputs_dir, 'fan_feature_importance.csv')
+    judge_interactions_path = os.path.join(outputs_dir, 'judge_interactions.csv')
+    fan_interactions_path = os.path.join(outputs_dir, 'fan_interactions.csv')
+    controversial_cases_path = os.path.join(outputs_dir, 'controversial_cases.csv')
+    feature_importance_comparison_pivot_path = os.path.join(outputs_dir, 'feature_importance_comparison_pivot.csv')
     
-    # 保存特征重要性对比数据
-    plot_data.to_csv('../data/outputs/feature_importance_comparison_pivot.csv')
+    judge_importance.to_csv(judge_importance_path, index=False)
+    fan_importance.to_csv(fan_importance_path, index=False)
+    judge_interactions.to_csv(judge_interactions_path, index=False)
+    fan_interactions.to_csv(fan_interactions_path, index=False)
+    controversial_cases.to_csv(controversial_cases_path, index=False)
+    plot_data.to_csv(feature_importance_comparison_pivot_path)
+    
+    print(f"已保存: {judge_importance_path}")
+    print(f"已保存: {fan_importance_path}")
+    print(f"已保存: {judge_interactions_path}")
+    print(f"已保存: {fan_interactions_path}")
+    print(f"已保存: {controversial_cases_path}")
+    print(f"已保存: {feature_importance_comparison_pivot_path}")
 
     print("\n" + "=" * 50)
     print("分析完成！结果已保存到以下目录:")
-    print("  - 数据输出: data/outputs/")
-    print("  - 可视化图表: visualizations/")
+    print(f"  - 数据输出: {outputs_dir}")
+    print(f"  - 可视化图表: {visualizations_dir}")
     print("=" * 50)
 
 

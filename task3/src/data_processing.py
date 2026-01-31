@@ -12,10 +12,24 @@ def load_and_preprocess_data():
     """
     print("正在加载 task1 目录下的预处理数据...")
     
+    # 获取当前文件所在目录的绝对路径，确保路径正确
+    import os
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    base_dir = os.path.dirname(os.path.dirname(current_dir))  # 到D:\MEISAI目录
+    
     # 加载三个预处理数据文件
-    rank_regular_path = '../task1/dwts_rank_regular_processed.csv'
-    percentage_regular_path = '../task1/dwts_percentage_regular_processed.csv'
-    rank_bottom_two_path = '../task1/dwts_rank_bottom_two_processed.csv'
+    rank_regular_path = os.path.join(base_dir, 'task1', 'dwts_rank_regular_processed.csv')
+    percentage_regular_path = os.path.join(base_dir, 'task1', 'dwts_percentage_regular_processed.csv')
+    rank_bottom_two_path = os.path.join(base_dir, 'task1', 'dwts_rank_bottom_two_processed.csv')
+    
+    # 验证文件是否存在
+    for file_path in [rank_regular_path, percentage_regular_path, rank_bottom_two_path]:
+        if not os.path.exists(file_path):
+            raise FileNotFoundError(f"数据文件不存在: {file_path}")
+    
+    print(f"正在读取: {rank_regular_path}")
+    print(f"正在读取: {percentage_regular_path}")
+    print(f"正在读取: {rank_bottom_two_path}")
     
     # 使用 cp1252 编码读取以正确处理重音字符（É, û 等）
     df_rank_regular = pd.read_csv(rank_regular_path, encoding='cp1252')
@@ -46,7 +60,12 @@ def load_and_preprocess_data():
     data = data.dropna(subset=['avg_judge_score'])
     
     # 加载粉丝投票预测数据
-    fan_vote_data = pd.read_csv('../task1/fan_vote_predictions_enhanced.csv')
+    fan_vote_path = os.path.join(base_dir, 'task1', 'fan_vote_predictions_enhanced.csv')
+    if not os.path.exists(fan_vote_path):
+        raise FileNotFoundError(f"粉丝投票预测数据文件不存在: {fan_vote_path}")
+    
+    print(f"正在读取: {fan_vote_path}")
+    fan_vote_data = pd.read_csv(fan_vote_path)
     data = pd.merge(data, fan_vote_data[['contestant', 'season', 'fan_vote_raw']],
                    left_on=['celebrity_name', 'season'],
                    right_on=['contestant', 'season'],

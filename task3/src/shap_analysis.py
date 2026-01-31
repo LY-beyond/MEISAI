@@ -115,7 +115,8 @@ def plot_summary_plot(shap_values, feature_names, title, save_path=None):
         plt.tight_layout()
         if save_path:
             plt.savefig(save_path, dpi=300, bbox_inches='tight')
-        plt.show()
+            print(f"已保存: {save_path}")
+        plt.close()  # 关闭图形，避免内存泄漏
     except Exception as e:
         print(f"SHAP summary plot失败，使用备选条形图: {e}")
         # 备选方案：创建特征重要性条形图
@@ -134,7 +135,8 @@ def plot_summary_plot(shap_values, feature_names, title, save_path=None):
         plt.tight_layout()
         if save_path:
             plt.savefig(save_path, dpi=300, bbox_inches='tight')
-        plt.show()
+            print(f"已保存: {save_path}")
+        plt.close()  # 关闭图形，避免内存泄漏
 
 
 def plot_shap_dependence(shap_values, X, feature_names, feature_idx, save_path=None):
@@ -151,7 +153,8 @@ def plot_shap_dependence(shap_values, X, feature_names, feature_idx, save_path=N
         shap.dependence_plot(feature_idx, values, X, feature_names=feature_names)
         if save_path:
             plt.savefig(save_path, dpi=300, bbox_inches='tight')
-        plt.show()
+            print(f"已保存: {save_path}")
+        plt.close()  # 关闭图形，避免内存泄漏
     except Exception as e:
         print(f"SHAP依赖图绘制失败: {e}")
         # 备选：绘制简单的散点图
@@ -159,11 +162,12 @@ def plot_shap_dependence(shap_values, X, feature_names, feature_idx, save_path=N
         plt.scatter(X[:, feature_idx], values[:, feature_idx] if hasattr(values, 'shape') and values.ndim == 2 else np.random.randn(X.shape[0]), alpha=0.5)
         plt.xlabel(feature_names[feature_idx])
         plt.ylabel('SHAP值')
-        plt.title(f'{feature_names[feature_idx]} 特征依赖图 (备选)')
+        plt.title(f'{feature_names[feature_idx]} 特征依赖图')
         plt.tight_layout()
         if save_path:
             plt.savefig(save_path, dpi=300, bbox_inches='tight')
-        plt.show()
+            print(f"已保存: {save_path}")
+        plt.close()  # 关闭图形，避免内存泄漏
 
 
 def plot_force_plot(explainer, shap_values, X, feature_names, sample_idx, save_path=None):
@@ -362,5 +366,4 @@ def find_controversial_cases(data, y_judge, y_fan):
     # 找到差异最大的案例
     controversial_indices = difference.abs().sort_values(ascending=False).head(10).index
 
-    return data.iloc[controversial_indices][['celebrity_name', 'season',
-                                             'avg_judge_score', 'predicted_fan_votes']]
+    return data.iloc[controversial_indices][['celebrity_name', 'season', 'avg_judge_score', 'predicted_fan_votes']]

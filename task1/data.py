@@ -1822,9 +1822,9 @@ def main_enhanced():
     print("="*80)
     
     # 1. 加载数据（使用三个预处理文件）
-    rank_regular_path = 'dwts_rank_regular_processed.csv'
-    percentage_regular_path = 'dwts_percentage_regular_processed.csv'
-    rank_bottom_two_path = 'dwts_rank_bottom_two_processed.csv'
+    rank_regular_path = 'task1\dwts_rank_regular_processed.csv'
+    percentage_regular_path = 'task1\dwts_percentage_regular_processed.csv'
+    rank_bottom_two_path = 'task1\dwts_rank_bottom_two_processed.csv'
     
     df, max_week, total_score_cols = load_and_preprocess_data(
         rank_regular_path, percentage_regular_path, rank_bottom_two_path
@@ -2018,21 +2018,26 @@ def main_enhanced():
         # 9. 高级统计分析
         statistical_results = advanced_statistical_analysis(predictions_df)
         
-        # 10. 生成综合报告
-        generate_comprehensive_comparison_report(predictions_df, comparison_df, weight_df,
+        # 10. 生成综合报告到task1目录
+        report_text = generate_comprehensive_comparison_report(predictions_df, comparison_df, weight_df,
                                                controversial_df, simulation_df,
                                                consistency_metrics, statistical_results)
         
-        # 11. 保存数据
-        predictions_df.to_csv('fan_vote_predictions_enhanced.csv', index=False)
+        # 保存报告到task1目录
+        with open('task1/voting_methods_comparison_report.txt', 'w', encoding='utf-8') as f:
+            f.write(report_text)
+        print("综合对比分析报告已保存到 'task1/voting_methods_comparison_report.txt'")
+        
+        # 11. 保存数据到task1目录
+        predictions_df.to_csv('task1/fan_vote_predictions_enhanced.csv', index=False)
         if not comparison_df.empty:
-            comparison_df.to_csv('voting_methods_comparison.csv', index=False)
+            comparison_df.to_csv('task1/voting_methods_comparison.csv', index=False)
         if not weight_df.empty:
-            weight_df.to_csv('fan_vote_weights_analysis.csv', index=False)
+            weight_df.to_csv('task1/fan_vote_weights_analysis.csv', index=False)
         if not controversial_df.empty:
-            controversial_df.to_csv('controversial_cases_analysis.csv', index=False)
+            controversial_df.to_csv('task1/controversial_cases_analysis.csv', index=False)
         if not simulation_df.empty:
-            simulation_df.to_csv('judge_choice_simulation.csv', index=False)
+            simulation_df.to_csv('task1/judge_choice_simulation.csv', index=False)
         
         # 保存不确定性分析结果
         if 'fan_vote_cv' in predictions_df.columns:
@@ -2041,8 +2046,8 @@ def main_enhanced():
                 'fan_vote_std': 'mean',
                 'fan_vote_ci_width': 'mean'
             }).round(6)
-            uncertainty_summary.to_csv('uncertainty_analysis_summary.csv')
-            print("不确定性分析摘要已保存到 'uncertainty_analysis_summary.csv'")
+            uncertainty_summary.to_csv('task1/uncertainty_analysis_summary.csv')
+            print("不确定性分析摘要已保存到 'task1/uncertainty_analysis_summary.csv'")
         
         print(f"\n所有分析完成！")
     else:

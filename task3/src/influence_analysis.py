@@ -12,6 +12,7 @@ import seaborn as sns
 import pandas as pd
 import numpy as np
 import warnings
+import joblib
 warnings.filterwarnings('ignore')
 
 # 设置matplotlib支持中文显示
@@ -200,10 +201,57 @@ def main():
     print(f"已保存: {controversial_cases_path}")
     print(f"已保存: {feature_importance_comparison_pivot_path}")
 
+    # 9. 保存模型和预处理对象到task3目录，便于以后使用
+    print("\n步骤9: 保存模型和预处理对象...")
+    
+    # 在task3目录下创建models目录
+    task3_models_dir = os.path.join(base_dir, 'task3', 'models')
+    os.makedirs(task3_models_dir, exist_ok=True)
+    
+    # 保存评委得分模型
+    judge_model_path = os.path.join(task3_models_dir, 'judge_score_model.joblib')
+    joblib.dump(judge_model, judge_model_path)
+    print(f"已保存评委得分模型: {judge_model_path}")
+    
+    # 保存粉丝投票模型
+    fan_model_path = os.path.join(task3_models_dir, 'fan_vote_model.joblib')
+    joblib.dump(fan_model, fan_model_path)
+    print(f"已保存粉丝投票模型: {fan_model_path}")
+    
+    # 保存预处理对象
+    preprocessor_path = os.path.join(task3_models_dir, 'preprocessor.joblib')
+    joblib.dump(preprocessor, preprocessor_path)
+    print(f"已保存预处理对象: {preprocessor_path}")
+    
+    # 保存特征名称
+    feature_names_path = os.path.join(task3_models_dir, 'feature_names.joblib')
+    joblib.dump(feature_names, feature_names_path)
+    print(f"已保存特征名称: {feature_names_path}")
+    
+    # 保存模型性能指标
+    model_metrics = {
+        'judge_model': {
+            'mse': mse,
+            'rmse': rmse,
+            'r2': r2,
+            'avg_r2': avg_r2
+        },
+        'fan_model': {
+            'mse': mse_fan,
+            'rmse': rmse_fan,
+            'r2': r2_fan,
+            'avg_r2': avg_r2_fan
+        }
+    }
+    model_metrics_path = os.path.join(task3_models_dir, 'model_metrics.joblib')
+    joblib.dump(model_metrics, model_metrics_path)
+    print(f"已保存模型性能指标: {model_metrics_path}")
+
     print("\n" + "=" * 50)
     print("分析完成！结果已保存到以下目录:")
     print(f"  - 数据输出: {outputs_dir}")
     print(f"  - 可视化图表: {visualizations_dir}")
+    print(f"  - 模型文件: {task3_models_dir}")
     print("=" * 50)
 
 

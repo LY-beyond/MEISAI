@@ -1,0 +1,86 @@
+《与星共舞》舞伴因素分析报告
+==================================================
+
+1. 数据概览
+   总数据条数: 421
+   不同舞伴数量: 60
+
+2. 舞伴配对次数分布（前20名）
+ballroom_partner
+Cheryl Burke             25
+Mark Ballas              21
+Tony Dovolani            21
+Valentin Chmerkovskiy    19
+Karina Smirnoff          18
+Derek Hough              17
+Maksim Chmerkoskiy       17
+Emma Slater              16
+Peta Murgatroyd          15
+Sharna Burgess           14
+Kym Johnson              14
+Witney Carson            14
+Gleb Savchenko           13
+Sasha Farber             12
+Artem Chigvintsev        12
+Louis van Amstel         11
+Edyta Sliwinska          11
+Anna Trebunskaya         11
+Lindsay Arnold           10
+Jenna Johnson             9
+
+3. 舞伴表现统计（至少配对5次）
+         ballroom_partner  avg_judge_score  avg_placement  pair_count  pro_experience
+0             Derek Hough         8.884301       2.941176          17               9
+1          Julianne Hough         7.853610       4.200000           5               2
+2       Daniella Karagach         7.849843       4.600000           5               3
+3             Mark Ballas         8.307507       5.190476          21              10
+4   Valentin Chmerkovskiy         8.374054       5.263158          19               9
+5          Lindsay Arnold         7.584763       5.400000          10               4
+6           Witney Carson         7.905199       5.500000          14               5
+7            Cheryl Burke         7.650290       5.800000          25               8
+8      Maksim Chmerkoskiy         7.913443       6.000000          17               5
+9            Sasha Farber         8.138946       6.083333          12               2
+10           Alan Bersten         7.688389       6.111111           9               2
+11        Lacey Schwimmer         6.832720       6.166667           6               2
+12            Kym Johnson         7.401772       6.285714          14               4
+13          Jenna Johnson         7.209734       6.444444           9               4
+14         Sharna Burgess         7.502191       6.571429          14               5
+15        Karina Smirnoff         7.300686       6.722222          18               4
+16       Louis van Amstel         7.105681       7.000000          11               1
+17      Chelsie Hightower         7.199996       7.285714           7               0
+18        Peta Murgatroyd         7.122886       7.400000          15               2
+19      Artem Chigvintsev         7.556969       7.416667          12               1
+20        Edyta Sliwinska         6.465642       7.545455          11               2
+21          Tony Dovolani         7.126796       7.666667          21               3
+22            Emma Slater         6.809371       7.937500          16               1
+23       Anna Trebunskaya         6.948701       8.181818          11               2
+24              Alec Mazo         6.908886       8.400000           5               1
+25         Gleb Savchenko         7.317285       8.461538          13               0
+26       Jonathan Roberts         6.888884       8.714286           7               1
+27      Brandon Armstrong         7.448794       9.125000           8               1
+28       Tristan MacManus         6.441667       9.600000           5               0
+29            Keo Motsepe         6.337398       9.888889           9               1
+30          Britt Stewart         6.124822      10.000000           6               0
+31          Pasha Pashkov         6.609136      10.428571           7               1
+
+4. 相关性分析
+舞伴经验与表现相关性矩阵:
+                 avg_judge_score  avg_placement  pro_experience
+avg_judge_score         1.000000      -0.845769        0.733535
+avg_placement          -0.845769       1.000000       -0.702558
+pro_experience          0.733535      -0.702558        1.000000
+
+5. 关键发现
+   最佳舞伴（平均排名最低）:
+   - 0: 平均排名 2.94, 配对次数 17
+   - 1: 平均排名 4.20, 配对次数 5
+   - 2: 平均排名 4.60, 配对次数 5
+   - 3: 平均排名 5.19, 配对次数 21
+   - 4: 平均排名 5.26, 配对次数 19
+
+   最差舞伴（平均排名最高）:
+   - 31: 平均排名 10.43, 配对次数 7
+   - 30: 平均排名 10.00, 配对次数 6
+   - 29: 平均排名 9.89, 配对次数 9
+   - 28: 平均排名 9.60, 配对次数 5
+   - 27: 平均排名 9.12, 配对次数 8
